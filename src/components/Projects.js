@@ -157,7 +157,7 @@ const Projects = () => {
           <Image src={notedz} alt="Notedz" />
           <ProjectInfo>
             <ProjectDescription>
-              Uma aplicação para escrever e notar tudo o que voce quiser.
+              Uma aplicação para escrever e anotar tudo o que você quiser! Desde receitas, até ideias, histórias ou roteiros!
             </ProjectDescription>
             <TechStack>
               <TechTag>React JS</TechTag>
@@ -195,7 +195,7 @@ const Projects = () => {
           <Image src={cz} alt="Commitz" />
           <ProjectInfo>
             <ProjectDescription>
-              Uma aplicação para você salvar suas metas anuais, controla-las e
+              Uma aplicação para você salvar suas metas anuais, controlá-las e
               acompanhar o progresso do ano.
             </ProjectDescription>
             <TechStack>
