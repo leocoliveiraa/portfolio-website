@@ -78,6 +78,7 @@ const NavLink = styled.a`
   cursor: pointer;
   color: rgb(197, 197, 197);
   margin-bottom: 10px;
+  text-decoration: none;
 
   &:hover {
     color: #fff;
