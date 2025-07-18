@@ -438,7 +438,10 @@ const Home: React.FC<HomeProps> = ({ language }) => {
   };
 
   const handleDownloadCV = () => {
-    window.open("/cv.pdf", "_blank");
+    window.open(
+      "https://drive.google.com/file/d/1T1llhBzoxHZGNYfqE_oulvJDF5dIVso4/view?usp=sharing",
+      "_blank"
+    );
   };
 
   return (
