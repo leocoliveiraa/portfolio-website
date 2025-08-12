@@ -349,6 +349,44 @@ const LoadingElement = styled.div`
 
 const projects: Project[] = [
   {
+    id: "VaultMapz",
+    title: "VaultMapz",
+    year: "2025",
+    description: {
+      pt: "Gerencie suas finanças com facilidade — acompanhe transações, categorize gastos e receitas, tudo em um design limpo e responsivo.",
+      en: "Manage your finances with ease — track transactions, categorize expenses and income, all in a clean and responsive design",
+    },
+    technologies: [
+      "React",
+      "Typescript",
+      "Vite",
+      "Firebase",
+      "Styled Components",
+      "Recharts",
+    ],
+    repositoryUrl: "https://github.com/leocoliveiraa/vaultmapz",
+    demoUrl: "https://vaultmapz.vercel.app",
+  },
+  {
+    id: "LariStudio",
+    title: "LariStudio Portfólio",
+    year: "2025",
+    description: {
+      pt: "Um site portfólio criado para a LariStudio! Uma designer gráfica para marcas alternativas, fofas & autênticas.",
+      en: "A website portfolio created for LariStudio! A graphic designer for alternative, cute and authentic brands.",
+    },
+    technologies: [
+      "React JS",
+      "Typescript",
+      "Vite",
+      "Styled Components",
+      "Vercel",
+      "Hostinger",
+    ],
+    repositoryUrl: "https://github.com/leocoliveiraa/laristudio",
+    demoUrl: "https://laristudio.com",
+  },
+  {
     id: "notedz",
     title: "Notedz",
     year: "2024",
