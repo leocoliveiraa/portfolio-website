@@ -353,8 +353,8 @@ const projects: Project[] = [
     title: "VaultMapz",
     year: "2025",
     description: {
-      pt: "Gerencie suas finanças com facilidade — acompanhe transações, categorize gastos e receitas, tudo em um design limpo e responsivo.",
-      en: "Manage your finances with ease — track transactions, categorize expenses and income, all in a clean and responsive design",
+      pt: "Gerencie suas finanças de forma prática — acompanhe receitas, despesas e saldo em um dashboard interativo, com autenticação, dark/light mode e design responsivo.",
+      en: "Manage your finances in a practical way — track income, expenses and balance on an interactive dashboard, with authentication, dark/light mode and responsive design.",
     },
     technologies: [
       "React",
@@ -546,3 +546,4 @@ const Projects: React.FC<ProjectsProps> = ({ language }) => {
 };
 
 export default Projects;
+
