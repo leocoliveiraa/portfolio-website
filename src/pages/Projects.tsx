@@ -368,6 +368,23 @@ const projects: Project[] = [
     demoUrl: "https://vaultmapz.vercel.app",
   },
   {
+    id: "RoundCorners",
+    title: "Round Corners",
+    year: "2025",
+    description: {
+      pt: "Uma ferramenta web simples e intuitiva para arredondar os cantos de imagens online. Interface drag-and-drop com preview em tempo real.",
+      en: "A simple and intuitive web tool for rounding image corners online. Drag-and-drop interface with real-time preview.",
+    },
+    technologies: [
+      "HTML5 Canvas",
+      "JavaScript",
+      "CSS3",
+      "Responsive Design",
+    ],
+    repositoryUrl: "https://github.com/leocoliveiraa/round-corners",
+    demoUrl: "https://roundcorners.vercel.app",
+  },
+  {
     id: "LariStudio",
     title: "LariStudio Portfólio",
     year: "2025",
@@ -546,4 +563,5 @@ const Projects: React.FC<ProjectsProps> = ({ language }) => {
 };
 
 export default Projects;
+
 
