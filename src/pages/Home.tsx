@@ -513,7 +513,7 @@ const Home: React.FC<HomeProps> = ({ language }) => {
                 <FaXTwitter />
               </a>
               <a
-                href="https://instagram.com/leocoliveira"
+                href="https://instagram.com/leobtwz"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Instagram"
@@ -529,3 +529,4 @@ const Home: React.FC<HomeProps> = ({ language }) => {
 };
 
 export default Home;
+
