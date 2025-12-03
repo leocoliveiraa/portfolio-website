@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import {
   FiGithub,
-  FiCalendar,
-  FiCode,
-  FiArrowRight,
+  FiExternalLink,
   FiFolder,
 } from "react-icons/fi";
 
@@ -23,6 +21,8 @@ interface Project {
   technologies: string[];
   repositoryUrl: string;
   demoUrl: string;
+  image: string;
+  featured?: boolean;
 }
 
 const fadeIn = keyframes`
@@ -36,14 +36,14 @@ const fadeIn = keyframes`
   }
 `;
 
-const pulse = keyframes`
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+const shimmer = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 `;
 
 const Container = styled.section`
   padding: 4rem 2rem;
-  max-width: 720px;
+  max-width: 1100px;
   margin: 0 auto;
   min-height: 80vh;
   animation: ${fadeIn} 0.6s ease-out;
@@ -55,7 +55,7 @@ const Container = styled.section`
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
 `;
 
 const Title = styled.h1`
@@ -96,162 +96,204 @@ const Subtitle = styled.p`
   }
 `;
 
-const ProjectsList = styled.div`
-  display: flex;
-  flex-direction: column;
+const ProjectsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  margin-bottom: 3rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 `;
 
-const ProjectCard = styled.div`
+
+const ProjectCard = styled.div<{ $featured?: boolean }>`
   background: ${({ theme }) => theme.background};
-  border: 1px solid ${({ theme }) => theme.text}10;
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 10px ${({ theme }) => theme.text}05;
+  border: 1px solid ${({ theme }) => theme.text}12;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  ${({ $featured }) =>
+    $featured &&
+    `
+    grid-column: span 2;
+    
+    @media (max-width: 900px) {
+      grid-column: span 1;
+    }
+  `}
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px ${({ theme }) => theme.text}10;
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px ${({ theme }) => theme.text}15;
+    border-color: ${({ theme }) => theme.text}25;
 
-    .project-actions {
+    .project-image {
+      transform: scale(1.03);
+    }
+
+    .project-overlay {
       opacity: 1;
-      transform: translateY(0);
     }
   }
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: ${({ theme }) => theme.text}08;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    height: 180px;
+  }
+`;
 
-    .project-actions {
-      opacity: 1;
-      transform: translateY(0);
-    }
+const ProjectImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.4s ease;
+`;
+
+const ImageOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    ${({ theme }) => theme.background}10 50%,
+    ${({ theme }) => theme.background}90 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1rem;
+  gap: 0.8rem;
+`;
+
+const OverlayButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px ${({ theme }) => theme.text}20;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px ${({ theme }) => theme.text}30;
+  }
+`;
+
+const ProjectContent = styled.div`
+  padding: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
   }
 `;
 
 const ProjectHeader = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
-`;
-
-const ProjectInfo = styled.div`
-  flex: 1;
+  margin-bottom: 0.75rem;
 `;
 
 const ProjectTitle = styled.h3`
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: ${({ theme }) => theme.text};
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  svg {
-    color: ${({ theme }) => theme.text}70;
-  }
+  margin: 0;
 `;
 
 const ProjectYear = styled.span`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.text}70;
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.text};
+  opacity: 0.6;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  background: ${({ theme }) => theme.text}08;
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
 `;
 
 const ProjectDescription = styled.p`
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: ${({ theme }) => theme.text};
-  opacity: 0.9;
+  opacity: 0.85;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
-`;
-
-const TechnologiesSection = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const TechnologiesLabel = styled.h4`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.text};
-  opacity: 0.7;
-  margin-bottom: 0.8rem;
-  font-weight: 500;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const TechnologiesList = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-bottom: 1.25rem;
 `;
 
 const TechnologyTag = styled.span`
-  background: ${({ theme }) => theme.text}10;
+  background: ${({ theme }) => theme.text}08;
   color: ${({ theme }) => theme.text};
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.text}15;
+  border: 1px solid ${({ theme }) => theme.text}10;
   transition: all 0.2s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.text}15;
+    background: ${({ theme }) => theme.text}12;
     transform: translateY(-1px);
   }
 `;
 
 const ProjectActions = styled.div`
   display: flex;
-  gap: 0.8rem;
-  opacity: 0.7;
-  transform: translateY(5px);
-  transition: all 0.2s ease;
-
-  @media (max-width: 768px) {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  gap: 0.75rem;
 `;
 
 const ActionButton = styled.a`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.7rem 1.2rem;
-  border: 1px solid ${({ theme }) => theme.text}25;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid ${({ theme }) => theme.text}20;
   color: ${({ theme }) => theme.text};
-  background: ${({ theme }) => theme.text}05;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 0.85rem;
   font-weight: 500;
   text-decoration: none;
   transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
 
   &:hover {
-    background: ${({ theme }) => theme.text}10;
-    border-color: ${({ theme }) => theme.text}40;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px ${({ theme }) => theme.text}15;
-
-    svg {
-      transform: translateX(2px);
-    }
+    background: ${({ theme }) => theme.text}08;
+    border-color: ${({ theme }) => theme.text}35;
+    transform: translateY(-2px);
   }
 
   svg {
     font-size: 1rem;
-    transition: transform 0.2s ease;
   }
 
   &.primary {
@@ -260,7 +302,7 @@ const ActionButton = styled.a`
     border-color: ${({ theme }) => theme.text};
 
     &:hover {
-      background: ${({ theme }) => theme.text}90;
+      opacity: 0.9;
       box-shadow: 0 4px 12px ${({ theme }) => theme.text}30;
     }
   }
@@ -271,6 +313,7 @@ const EmptyState = styled.div`
   padding: 4rem 2rem;
   color: ${({ theme }) => theme.text};
   opacity: 0.7;
+  grid-column: span 2;
 
   svg {
     font-size: 4rem;
@@ -292,62 +335,107 @@ const EmptyState = styled.div`
 const LoadingCard = styled.div`
   background: ${({ theme }) => theme.background};
   border: 1px solid ${({ theme }) => theme.text}10;
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: 20px;
+  overflow: hidden;
   animation: ${fadeIn} 0.6s ease-out;
+`;
+
+const LoadingImage = styled.div`
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.text}08 25%,
+    ${({ theme }) => theme.text}15 50%,
+    ${({ theme }) => theme.text}08 75%
+  );
+  background-size: 200% 100%;
+  animation: ${shimmer} 1.5s infinite;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    height: 180px;
   }
 `;
 
+const LoadingContent = styled.div`
+  padding: 1.5rem;
+`;
+
 const LoadingElement = styled.div`
-  background: ${({ theme }) => theme.text}10;
-  border-radius: 4px;
-  animation: ${pulse} 1.5s ease-in-out infinite;
-  margin-bottom: 1rem;
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.text}08 25%,
+    ${({ theme }) => theme.text}15 50%,
+    ${({ theme }) => theme.text}08 75%
+  );
+  background-size: 200% 100%;
+  animation: ${shimmer} 1.5s infinite;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
 
   &.title {
     height: 24px;
     width: 60%;
-    margin-bottom: 0.5rem;
-  }
-
-  &.year {
-    height: 16px;
-    width: 30%;
-    margin-bottom: 1.5rem;
   }
 
   &.description {
-    height: 16px;
+    height: 14px;
     width: 100%;
-    margin-bottom: 0.5rem;
 
-    &:last-of-type {
+    &:nth-child(3) {
       width: 80%;
-      margin-bottom: 1.5rem;
     }
   }
 
   &.tech {
-    height: 24px;
-    width: 80px;
+    height: 28px;
+    width: 70px;
     display: inline-block;
     margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    border-radius: 8px;
   }
 
-  &.actions {
-    height: 36px;
-    width: 100px;
+  &.button {
+    height: 40px;
+    width: 48%;
     display: inline-block;
-    margin-right: 0.8rem;
-    margin-top: 1rem;
+    margin-right: 4%;
+    border-radius: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 `;
 
+
 const projects: Project[] = [
+  {
+    id: "piwicode",
+    title: "PiwiCode",
+    year: "2025",
+    description: {
+      pt: "Uma plataforma comunidade para pessoas aprenderem programação, com desafios de código, aulas, conteúdos, gamificação e muito mais.",
+      en: "A community platform for people to learn programming, with code challenges, lessons, content, gamification and much more.",
+    },
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Vercel"],
+    repositoryUrl: "https://github.com/leocoliveiraa",
+    demoUrl: "https://piwicode.com",
+    image: "/piwicode.png",
+  },
+  {
+    id: "pdfusion",
+    title: "PDFusion",
+    year: "2025",
+    description: {
+      pt: "Um site que utiliza IA para gerar resumos inteligentes do seu PDF. Faça upload e obtenha insights instantâneos.",
+      en: "A website that uses AI to generate smart summaries of your PDF. Upload and get instant insights.",
+    },
+    technologies: ["TypeScript", "Node.js", "Express", "Groq AI", "Llama 3.3"],
+    repositoryUrl: "https://github.com/leocoliveiraa/pdfusion",
+    demoUrl: "https://thepdfusion.vercel.app",
+    image: "/pdfusion.png",
+  },
   {
     id: "VaultMapz",
     title: "VaultMapz",
@@ -356,16 +444,10 @@ const projects: Project[] = [
       pt: "Gerencie suas finanças de forma prática — acompanhe receitas, despesas e saldo em um dashboard interativo, com autenticação, dark/light mode e design responsivo.",
       en: "Manage your finances in a practical way — track income, expenses and balance on an interactive dashboard, with authentication, dark/light mode and responsive design.",
     },
-    technologies: [
-      "React",
-      "Typescript",
-      "Vite",
-      "Firebase",
-      "Styled Components",
-      "Recharts",
-    ],
+    technologies: ["React", "TypeScript", "Firebase", "Styled Components", "Recharts"],
     repositoryUrl: "https://github.com/leocoliveiraa/vaultmapz",
     demoUrl: "https://vaultmapz.vercel.app",
+    image: "/vaultmapz.png",
   },
   {
     id: "RoundCorners",
@@ -375,14 +457,10 @@ const projects: Project[] = [
       pt: "Uma ferramenta web simples e intuitiva para arredondar os cantos de imagens online. Interface drag-and-drop com preview em tempo real.",
       en: "A simple and intuitive web tool for rounding image corners online. Drag-and-drop interface with real-time preview.",
     },
-    technologies: [
-      "HTML5 Canvas",
-      "JavaScript",
-      "CSS3",
-      "Responsive Design",
-    ],
+    technologies: ["HTML5 Canvas", "JavaScript", "CSS3"],
     repositoryUrl: "https://github.com/leocoliveiraa/round-corners",
     demoUrl: "https://roundcorners.vercel.app",
+    image: "/roundcorners.png",
   },
   {
     id: "LariStudio",
@@ -392,16 +470,10 @@ const projects: Project[] = [
       pt: "Um site portfólio criado para a LariStudio! Uma designer gráfica para marcas alternativas, fofas & autênticas.",
       en: "A website portfolio created for LariStudio! A graphic designer for alternative, cute and authentic brands.",
     },
-    technologies: [
-      "React JS",
-      "Typescript",
-      "Vite",
-      "Styled Components",
-      "Vercel",
-      "Hostinger",
-    ],
+    technologies: ["React", "TypeScript", "Styled Components", "Vercel"],
     repositoryUrl: "https://github.com/leocoliveiraa/laristudio",
     demoUrl: "https://laristudio.com",
+    image: "/laristudio.png",
   },
   {
     id: "notedz",
@@ -411,31 +483,19 @@ const projects: Project[] = [
       pt: "Uma aplicação para escrever e anotar tudo o que você quiser! Desde receitas, até ideias, histórias ou roteiros!",
       en: "An application to write and note everything you want! From recipes to ideas, stories or scripts!",
     },
-    technologies: ["React JS", "Styled Components", "Quill", "Local Storage"],
+    technologies: ["React", "Styled Components", "Quill", "Local Storage"],
     repositoryUrl: "https://github.com/leocoliveiraa/notedz",
     demoUrl: "https://notedz.vercel.app",
-  },
-  {
-    id: "commitz",
-    title: "Commitz",
-    year: "2024",
-    description: {
-      pt: "Uma aplicação para você salvar suas metas anuais, controlá-las e acompanhar o progresso do ano.",
-      en: "An application for you to save your annual goals, control them and track your year's progress.",
-    },
-    technologies: ["React JS", "Tailwind CSS"],
-    repositoryUrl: "https://github.com/leocoliveiraa/commitz",
-    demoUrl: "https://commitzz.vercel.app",
+    image: "/notedz.png",
   },
 ];
 
 const translations = {
   en: {
     title: "Projects",
-    subtitle: "Some of the projects I've worked on",
-    technologies: "Technologies",
-    repository: "Repository",
-    visit: "Visit",
+    subtitle: "A selection of projects I've built with passion and dedication",
+    repository: "Code",
+    visit: "Live Demo",
     noProjects: {
       title: "No projects yet",
       description: "New projects coming soon!",
@@ -443,10 +503,9 @@ const translations = {
   },
   pt: {
     title: "Projetos",
-    subtitle: "Alguns dos projetos que desenvolvi",
-    technologies: "Tecnologias",
-    repository: "Repositório",
-    visit: "Visitar",
+    subtitle: "Uma seleção de projetos que construí com paixão e dedicação",
+    repository: "Código",
+    visit: "Ver Demo",
     noProjects: {
       title: "Nenhum projeto ainda",
       description: "Novos projetos em breve!",
@@ -463,7 +522,7 @@ const Projects: React.FC<ProjectsProps> = ({ language }) => {
     const timer = setTimeout(() => {
       setIsLoading(false);
       setVisibleProjects(projects);
-    }, 300);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, []);
@@ -471,15 +530,21 @@ const Projects: React.FC<ProjectsProps> = ({ language }) => {
   const LoadingProjectCard = React.useMemo(
     () => (
       <LoadingCard>
-        <LoadingElement className="title" />
-        <LoadingElement className="year" />
-        <LoadingElement className="description" />
-        <LoadingElement className="description" />
-        <LoadingElement className="tech" />
-        <LoadingElement className="tech" />
-        <LoadingElement className="tech" />
-        <LoadingElement className="actions" />
-        <LoadingElement className="actions" />
+        <LoadingImage />
+        <LoadingContent>
+          <LoadingElement className="title" />
+          <LoadingElement className="description" />
+          <LoadingElement className="description" />
+          <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+            <LoadingElement className="tech" />
+            <LoadingElement className="tech" />
+            <LoadingElement className="tech" />
+          </div>
+          <div>
+            <LoadingElement className="button" />
+            <LoadingElement className="button" />
+          </div>
+        </LoadingContent>
       </LoadingCard>
     ),
     []
@@ -493,75 +558,96 @@ const Projects: React.FC<ProjectsProps> = ({ language }) => {
       </Header>
 
       {isLoading ? (
-        <ProjectsList>
-          {[1, 2].map((item) => (
+        <ProjectsGrid>
+          {[1, 2, 3, 4].map((item) => (
             <React.Fragment key={item}>{LoadingProjectCard}</React.Fragment>
           ))}
-        </ProjectsList>
+        </ProjectsGrid>
       ) : visibleProjects.length === 0 ? (
-        <EmptyState>
-          <FiFolder />
-          <h3>{t.noProjects.title}</h3>
-          <p>{t.noProjects.description}</p>
-        </EmptyState>
+        <ProjectsGrid>
+          <EmptyState>
+            <FiFolder />
+            <h3>{t.noProjects.title}</h3>
+            <p>{t.noProjects.description}</p>
+          </EmptyState>
+        </ProjectsGrid>
       ) : (
-        <ProjectsList>
-          {visibleProjects.map((project) => (
-            <ProjectCard key={project.id}>
-              <ProjectHeader>
-                <ProjectInfo>
-                  <ProjectTitle>
-                    <FiCode />
-                    {project.title}
-                  </ProjectTitle>
-                  <ProjectYear>
-                    <FiCalendar />
-                    {project.year}
-                  </ProjectYear>
-                </ProjectInfo>
-              </ProjectHeader>
+        <ProjectsGrid>
+          {visibleProjects.map((project, index) => (
+            <ProjectCard 
+              key={project.id} 
+              $featured={project.featured}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <ImageContainer>
+                <ProjectImage
+                  className="project-image"
+                  src={project.image}
+                  alt={project.title}
+                  loading="lazy"
+                />
+                <ImageOverlay className="project-overlay">
+                  <OverlayButton
+                    href={project.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="GitHub"
+                  >
+                    <FiGithub />
+                  </OverlayButton>
+                  <OverlayButton
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Live Demo"
+                  >
+                    <FiExternalLink />
+                  </OverlayButton>
+                </ImageOverlay>
+              </ImageContainer>
 
-              <ProjectDescription>
-                {project.description[language]}
-              </ProjectDescription>
+              <ProjectContent>
+                <ProjectHeader>
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectYear>{project.year}</ProjectYear>
+                </ProjectHeader>
 
-              <TechnologiesSection>
-                <TechnologiesLabel>{t.technologies}</TechnologiesLabel>
+                <ProjectDescription>
+                  {project.description[language]}
+                </ProjectDescription>
+
                 <TechnologiesList>
-                  {project.technologies.map((tech, techIndex) => (
+                  {project.technologies.slice(0, 5).map((tech, techIndex) => (
                     <TechnologyTag key={techIndex}>{tech}</TechnologyTag>
                   ))}
                 </TechnologiesList>
-              </TechnologiesSection>
 
-              <ProjectActions className="project-actions">
-                <ActionButton
-                  href={project.repositoryUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FiGithub />
-                  {t.repository}
-                </ActionButton>
-
-                <ActionButton
-                  href={project.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="primary"
-                >
-                  {t.visit}
-                  <FiArrowRight />
-                </ActionButton>
-              </ProjectActions>
+                <ProjectActions>
+                  <ActionButton
+                    href={project.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FiGithub />
+                    {t.repository}
+                  </ActionButton>
+                  <ActionButton
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="primary"
+                  >
+                    <FiExternalLink />
+                    {t.visit}
+                  </ActionButton>
+                </ProjectActions>
+              </ProjectContent>
             </ProjectCard>
           ))}
-        </ProjectsList>
+        </ProjectsGrid>
       )}
     </Container>
   );
 };
 
 export default Projects;
-
-
