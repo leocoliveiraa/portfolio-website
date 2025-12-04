@@ -31,12 +31,12 @@ const NavbarContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2.5rem 1rem 1.5rem;
+  padding: 1.25rem 1rem;
   position: relative;
 
   @media (max-width: 768px) {
     justify-content: space-between;
-    padding: 1.5rem 1rem;
+    padding: 1rem;
   }
 `;
 
@@ -98,7 +98,7 @@ const DesktopNavItems = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
   position: relative;
   padding: 0.5rem 1rem;
   background: ${({ theme }) => theme.text}02;

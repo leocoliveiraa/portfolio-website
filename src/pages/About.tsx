@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { FiUser, FiCalendar, FiCode, FiBookOpen } from "react-icons/fi";
+import { FiUser, FiCalendar, FiCode, FiBookOpen, FiBriefcase, FiExternalLink } from "react-icons/fi";
 import { FaGraduationCap } from "react-icons/fa6";
 
 import {
@@ -11,13 +11,12 @@ import {
   SiNodedotjs,
   SiTailwindcss,
   SiTypescript,
-  SiDotnet,
   SiMongodb,
   SiMysql,
   SiFirebase,
+  SiSupabase,
+  SiPostgresql,
 } from "react-icons/si";
-
-import { TbBrandCSharp } from "react-icons/tb";
 
 interface AboutProps {
   language: "en" | "pt";
@@ -102,6 +101,16 @@ const Content = styled.div`
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+`;
+
+const RightColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  @media (max-width: 968px) {
     gap: 1.5rem;
   }
 `;
@@ -198,6 +207,72 @@ const EducationPeriod = styled.span`
   gap: 0.3rem;
 `;
 
+const ExperienceCard = styled.div`
+  background: ${({ theme }) => theme.text}05;
+  border: 1px solid ${({ theme }) => theme.text}10;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: background 0.2s ease;
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+
+  &:hover {
+    background: ${({ theme }) => theme.text}08;
+  }
+`;
+
+const CompanyLogo = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid ${({ theme }) => theme.text}10;
+`;
+
+const ExperienceInfo = styled.div`
+  flex: 1;
+`;
+
+const ExperienceRole = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.text};
+  margin-bottom: 0.4rem;
+`;
+
+const CompanyLink = styled.a`
+  font-size: 0.95rem;
+  color: ${({ theme }) => theme.text};
+  opacity: 0.85;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  margin-bottom: 0.4rem;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  svg {
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+`;
+
+const ExperiencePeriod = styled.span`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.text}70;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+`;
+
 const TechStackSection = styled.div`
   grid-column: 1 / -1;
 
@@ -262,12 +337,6 @@ const TechCard = styled.div`
   &.nodejs svg {
     color: #339933;
   }
-  &.csharp svg {
-    color: #239120;
-  }
-  &.dotnet svg {
-    color: #512bd4;
-  }
   &.mongodb svg {
     color: #47a248;
   }
@@ -279,6 +348,12 @@ const TechCard = styled.div`
   }
   &.tailwind svg {
     color: #06b6d4;
+  }
+  &.supabase svg {
+    color: #3ecf8e;
+  }
+  &.postgresql svg {
+    color: #4169e1;
   }
 `;
 
@@ -304,6 +379,12 @@ const translations = {
       university: "UNINTER",
       course: "Systems Analysis and Development",
       period: "2025-2027",
+    },
+    experience: {
+      title: "Experience",
+      role: "Technology Intern",
+      company: "Cluster",
+      period: "Oct 2025 - Present",
     },
     techStack: {
       title: "Technology Stack",
@@ -337,6 +418,12 @@ const translations = {
       course: "Análise e Desenvolvimento de Sistemas",
       period: "2025-2027",
     },
+    experience: {
+      title: "Experiência",
+      role: "Estagiário de Tecnologia",
+      company: "Cluster",
+      period: "Out 2025 - Presente",
+    },
     techStack: {
       title: "Stack Tecnológico",
     },
@@ -366,8 +453,8 @@ const About: React.FC<AboutProps> = ({ language }) => {
       { name: "TypeScript", icon: SiTypescript, class: "typescript" },
       { name: "React", icon: SiReact, class: "react" },
       { name: "Node.js", icon: SiNodedotjs, class: "nodejs" },
-      { name: "C#", icon: TbBrandCSharp, class: "csharp" },
-      { name: ".NET", icon: SiDotnet, class: "dotnet" },
+      { name: "PostgreSQL", icon: SiPostgresql, class: "postgresql" },
+      { name: "Supabase", icon: SiSupabase, class: "supabase" },
       { name: "MongoDB", icon: SiMongodb, class: "mongodb" },
       { name: "MySQL", icon: SiMysql, class: "mysql" },
       { name: "Firebase", icon: SiFirebase, class: "firebase" },
@@ -395,23 +482,50 @@ const About: React.FC<AboutProps> = ({ language }) => {
           <AboutText>{t.about.text2}</AboutText>
         </Section>
 
-        <Section>
-          <SectionHeader>
-            <FaGraduationCap />
-            <h2>{t.education.title}</h2>
-          </SectionHeader>
-          <EducationCard>
-            <EducationTitle>
-              <FiBookOpen />
-              {t.education.university}
-            </EducationTitle>
-            <EducationSubtitle>{t.education.course}</EducationSubtitle>
-            <EducationPeriod>
-              <FiCalendar />
-              {t.education.period}
-            </EducationPeriod>
-          </EducationCard>
-        </Section>
+        <RightColumn>
+          <Section>
+            <SectionHeader>
+              <FiBriefcase />
+              <h2>{t.experience.title}</h2>
+            </SectionHeader>
+            <ExperienceCard>
+              <CompanyLogo src="/cluster.jpeg" alt="Cluster" />
+              <ExperienceInfo>
+                <ExperienceRole>{t.experience.role}</ExperienceRole>
+                <CompanyLink
+                  href="https://soucluster.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.experience.company}
+                  <FiExternalLink />
+                </CompanyLink>
+                <ExperiencePeriod>
+                  <FiCalendar />
+                  {t.experience.period}
+                </ExperiencePeriod>
+              </ExperienceInfo>
+            </ExperienceCard>
+          </Section>
+
+          <Section>
+            <SectionHeader>
+              <FaGraduationCap />
+              <h2>{t.education.title}</h2>
+            </SectionHeader>
+            <EducationCard>
+              <EducationTitle>
+                <FiBookOpen />
+                {t.education.university}
+              </EducationTitle>
+              <EducationSubtitle>{t.education.course}</EducationSubtitle>
+              <EducationPeriod>
+                <FiCalendar />
+                {t.education.period}
+              </EducationPeriod>
+            </EducationCard>
+          </Section>
+        </RightColumn>
 
         <TechStackSection>
           <Section>

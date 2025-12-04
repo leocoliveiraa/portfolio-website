@@ -8,6 +8,7 @@ import {
   FiCode,
   FiDownload,
   FiExternalLink,
+  FiYoutube,
 } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -301,6 +302,16 @@ const SocialIcons = styled.div`
       }
     }
 
+    &[href*="youtube.com"] {
+      &:hover {
+        background: rgba(255, 0, 0, 0.1);
+        border-color: rgba(255, 0, 0, 0.3);
+        color: #ff0000;
+        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
+        transform: translateY(-3px) scale(1.05);
+      }
+    }
+
     &[href*="instagram.com"] {
       &:hover {
         background: linear-gradient(
@@ -319,7 +330,7 @@ const SocialIcons = styled.div`
       &:hover {
         background: rgba(0, 0, 0, 0.1);
         border-color: rgba(0, 0, 0, 0.3);
-        color: #33333;
+        color: #000;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         transform: translateY(-3px) scale(1.05);
       }
@@ -388,9 +399,6 @@ const translations = {
       react: "React",
       typescript: "TypeScript",
       nodejs: "Node.js",
-      expanding: "Currently expanding my expertise in",
-      csharp: "C#",
-      dotnet: ".NET",
     },
     buttons: {
       viewProjects: "View Projects",
@@ -408,9 +416,6 @@ const translations = {
       react: "React",
       typescript: "TypeScript",
       nodejs: "Node.js",
-      expanding: "Atualmente expandindo minha expertise em",
-      csharp: "C#",
-      dotnet: ".NET",
     },
     buttons: {
       viewProjects: "Ver Projetos",
@@ -445,88 +450,89 @@ const Home: React.FC<HomeProps> = ({ language }) => {
   };
 
   return (
-    <>
-      <Container>
-        <Header>
-          <StatusIndicator>
-            <div className="status-dot" />
-            <span>{t.status}</span>
-          </StatusIndicator>
-        </Header>
+    <Container>
+      <Header>
+        <StatusIndicator>
+          <div className="status-dot" />
+          <span>{t.status}</span>
+        </StatusIndicator>
+      </Header>
 
-        <Description>
-          {t.description.text} <Highlight>{t.description.typescript}</Highlight>
-          , <Highlight>{t.description.react}</Highlight>{" "}
-          {language === "en" ? "and" : "e"}{" "}
-          <Highlight>{t.description.nodejs}</Highlight>.{" "}
-          {t.description.expanding}{" "}
-          <Highlight>{t.description.csharp}</Highlight>{" "}
-          {language === "en" ? "and" : "e"}{" "}
-          <Highlight>{t.description.dotnet}</Highlight>.
-        </Description>
+      <Description>
+        {t.description.text} <Highlight>{t.description.typescript}</Highlight>
+        , <Highlight>{t.description.react}</Highlight>{" "}
+        {language === "en" ? "and" : "e"}{" "}
+        <Highlight>{t.description.nodejs}</Highlight>.
+      </Description>
 
-        <ActionsSection>
-          <PrimaryActions>
-            <PrimaryButton onClick={() => navigate("/projects")}>
-              <FiCode />
-              {t.buttons.viewProjects}
-              <FiArrowRight />
-            </PrimaryButton>
+      <ActionsSection>
+        <PrimaryActions>
+          <PrimaryButton onClick={() => navigate("/projects")}>
+            <FiCode />
+            {t.buttons.viewProjects}
+            <FiArrowRight />
+          </PrimaryButton>
 
-            <SecondaryButton onClick={handleContactClick}>
-              {t.buttons.contact}
-              <FiArrowRight />
-            </SecondaryButton>
+          <SecondaryButton onClick={handleContactClick}>
+            {t.buttons.contact}
+            <FiArrowRight />
+          </SecondaryButton>
 
-            <SecondaryButton onClick={handleDownloadCV}>
-              <FiDownload />
-              {t.buttons.downloadCV}
-              <FiExternalLink />
-            </SecondaryButton>
-          </PrimaryActions>
+          <SecondaryButton onClick={handleDownloadCV}>
+            <FiDownload />
+            {t.buttons.downloadCV}
+            <FiExternalLink />
+          </SecondaryButton>
+        </PrimaryActions>
 
-          <SocialSection>
-            <SocialLabel>{t.social.connect}</SocialLabel>
-            <SocialIcons>
-              <a
-                href="https://github.com/leocoliveiraa"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="GitHub"
-              >
-                <FiGithub />
-              </a>
-              <a
-                href="https://linkedin.com/in/leocoliveira"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="LinkedIn"
-              >
-                <FiLinkedin />
-              </a>
-              <a
-                href="https://twitter.com/leocoliveira"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Twitter"
-              >
-                <FaXTwitter />
-              </a>
-              <a
-                href="https://instagram.com/leobtwz"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Instagram"
-              >
-                <FiInstagram />
-              </a>
-            </SocialIcons>
-          </SocialSection>
-        </ActionsSection>
-      </Container>
-    </>
+        <SocialSection>
+          <SocialLabel>{t.social.connect}</SocialLabel>
+          <SocialIcons>
+            <a
+              href="https://github.com/leocoliveiraa"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub"
+            >
+              <FiGithub />
+            </a>
+            <a
+              href="https://linkedin.com/in/leocoliveira"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="LinkedIn"
+            >
+              <FiLinkedin />
+            </a>
+            <a
+              href="https://www.youtube.com/@leodev_"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="YouTube"
+            >
+              <FiYoutube />
+            </a>
+            <a
+              href="https://twitter.com/leocoliveira"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Twitter"
+            >
+              <FaXTwitter />
+            </a>
+            <a
+              href="https://instagram.com/leobtwz"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Instagram"
+            >
+              <FiInstagram />
+            </a>
+          </SocialIcons>
+        </SocialSection>
+      </ActionsSection>
+    </Container>
   );
 };
 
 export default Home;
-
