@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import {
   FiSun,
@@ -10,7 +10,6 @@ import {
   FiGlobe,
 } from "react-icons/fi";
 import { FaRegMoon } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
 
 interface NavbarProps {
   isDark: boolean;
@@ -31,8 +30,13 @@ const NavbarContainer = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.25rem 1rem;
-  position: relative;
+  padding: 0.35rem 1rem;
+  position: fixed;
+  top: 0.35rem;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: none;
 
   @media (max-width: 768px) {
     justify-content: space-between;
@@ -41,70 +45,48 @@ const NavbarContainer = styled.nav`
 `;
 
 const NavInner = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  gap: 1rem;
+  width: min(860px, calc(100% - 2rem));
+  padding: 0.55rem 0.75rem;
+  border: 1px solid ${({ theme }) => theme.text}12;
+  border-radius: 999px;
+  background: ${({ theme }) => theme.background}d9;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
   position: relative;
+  pointer-events: auto;
 
   @media (max-width: 768px) {
-    flex-direction: row;
+    display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: calc(100% - 1rem);
     align-items: center;
   }
 `;
 
-const Name = styled.h1`
-  font-size: 1.3rem;
-  font-weight: 600;
+const Brand = styled.a`
   color: ${({ theme }) => theme.text};
-  position: relative;
-  padding-bottom: 8px;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-
-  &::after {
-    content: "";
-    width: 24px;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      ${({ theme }) => theme.text}60,
-      ${({ theme }) => theme.text}
-    );
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 10px;
-    transition: width 0.3s ease;
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding-left: 0.7rem;
+  opacity: 0.95;
 
   @media (max-width: 768px) {
-    padding-bottom: 0;
-    font-size: 1.2rem;
+    font-size: 0.95rem;
   }
 `;
 
 const DesktopNavItems = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-top: 0.75rem;
+  justify-content: center;
+  gap: 0.65rem;
   position: relative;
-  padding: 0.5rem 1rem;
-  background: ${({ theme }) => theme.text}02;
-  border-radius: 50px;
-  border: 1px solid ${({ theme }) => theme.text}08;
-  backdrop-filter: blur(10px);
 
   @media (max-width: 768px) {
     display: none;
@@ -118,7 +100,7 @@ const DesktopNavItems = styled.div`
     font-size: 0.9rem;
     color: ${({ theme }) => theme.text};
     text-decoration: none;
-    padding: 0.5rem 0.8rem;
+    padding: 0.5rem 0.7rem;
     border-radius: 20px;
     transition: all 0.3s ease;
     opacity: 0.8;
@@ -162,6 +144,17 @@ const DesktopNavItems = styled.div`
     &:hover svg {
       transform: scale(1.1);
     }
+  }
+`;
+
+const DesktopControls = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -450,9 +443,18 @@ const Navbar: React.FC<NavbarProps> = ({
   language,
   toggleLanguage,
 }) => {
-  const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const t = translations[language];
+  const navItems = useMemo(
+    () => [
+      { id: "home", label: t.home, icon: FiHome },
+      { id: "projects", label: t.projects, icon: FiFolder },
+      { id: "about", label: t.about, icon: FiUser },
+      { id: "contact", label: t.contact, icon: FiMail },
+    ],
+    [t.about, t.contact, t.home, t.projects]
+  );
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -463,8 +465,30 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location]);
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target.id) {
+          setActiveSection(visibleEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-20% 0px -55% 0px",
+        threshold: [0.15, 0.35, 0.6],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [navItems]);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -493,42 +517,29 @@ const Navbar: React.FC<NavbarProps> = ({
     <>
       <NavbarContainer>
         <NavInner>
-          <Name>Leonardo</Name>
+          <Brand href="#home">Leonardo</Brand>
 
           <DesktopNavItems>
+            {navItems.map(({ id, label, icon: Icon }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={activeSection === id ? "active" : ""}
+              >
+                <Icon />
+                {label}
+              </a>
+            ))}
+          </DesktopNavItems>
+
+          <DesktopControls>
             <ThemeToggle onClick={toggleTheme} title={t.theme} isDark={isDark}>
               {isDark ? <FiSun /> : <FaRegMoon />}
             </ThemeToggle>
-
-            <Link to="/" className={location.pathname === "/" ? "active" : ""}>
-              <FiHome />
-              {t.home}
-            </Link>
-            <Link
-              to="/projects"
-              className={location.pathname === "/projects" ? "active" : ""}
-            >
-              <FiFolder />
-              {t.projects}
-            </Link>
-            <Link
-              to="/about"
-              className={location.pathname === "/about" ? "active" : ""}
-            >
-              <FiUser />
-              {t.about}
-            </Link>
-            <Link
-              to="/contact"
-              className={location.pathname === "/contact" ? "active" : ""}
-            >
-              <FiMail />
-              {t.contact}
-            </Link>
             <LanguageToggle onClick={toggleLanguage} title={t.language}>
               <FiGlobe />
             </LanguageToggle>
-          </DesktopNavItems>
+          </DesktopControls>
 
           <MobileControls>
             <MobileMenuButton
@@ -551,38 +562,17 @@ const Navbar: React.FC<NavbarProps> = ({
         </MobileMenuHeader>
 
         <MobileNavItems>
-          <Link
-            to="/"
-            className={location.pathname === "/" ? "active" : ""}
-            onClick={closeMobileMenu}
-          >
-            <FiHome />
-            {t.home}
-          </Link>
-          <Link
-            to="/projects"
-            className={location.pathname === "/projects" ? "active" : ""}
-            onClick={closeMobileMenu}
-          >
-            <FiFolder />
-            {t.projects}
-          </Link>
-          <Link
-            to="/about"
-            className={location.pathname === "/about" ? "active" : ""}
-            onClick={closeMobileMenu}
-          >
-            <FiUser />
-            {t.about}
-          </Link>
-          <Link
-            to="/contact"
-            className={location.pathname === "/contact" ? "active" : ""}
-            onClick={closeMobileMenu}
-          >
-            <FiMail />
-            {t.contact}
-          </Link>
+          {navItems.map(({ id, label, icon: Icon }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={activeSection === id ? "active" : ""}
+              onClick={closeMobileMenu}
+            >
+              <Icon />
+              {label}
+            </a>
+          ))}
         </MobileNavItems>
 
         <MobileControlsSection>

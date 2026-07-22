@@ -236,10 +236,6 @@ const ProjectDescription = styled.p`
   opacity: 0.85;
   line-height: 1.6;
   margin-bottom: 1.25rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 `;
 
 const TechnologiesList = styled.div`
@@ -415,8 +411,8 @@ const projects: Project[] = [
     title: "PiwiCode",
     year: "2025",
     description: {
-      pt: "Uma plataforma comunidade para pessoas aprenderem programação, com desafios de código, aulas, conteúdos, gamificação e muito mais.",
-      en: "A community platform for people to learn programming, with code challenges, lessons, content, gamification and much more.",
+      pt: "Uma comunidade para aprender programação com desafios de código, aulas, conteúdos e gamificação.",
+      en: "A community for learning programming with coding challenges, lessons, content and gamification.",
     },
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Vercel"],
     repositoryUrl: "https://github.com/leocoliveiraa",
@@ -428,8 +424,8 @@ const projects: Project[] = [
     title: "PDFusion",
     year: "2025",
     description: {
-      pt: "Um site que utiliza IA para gerar resumos inteligentes do seu PDF. Faça upload e obtenha insights instantâneos.",
-      en: "A website that uses AI to generate smart summaries of your PDF. Upload and get instant insights.",
+      pt: "Uma ferramenta com IA para enviar PDFs e gerar resumos mais rápidos, claros e fáceis de consultar.",
+      en: "An AI tool for uploading PDFs and generating faster, clearer and easier-to-read summaries.",
     },
     technologies: ["TypeScript", "Node.js", "Express", "Groq AI", "Llama 3.3"],
     repositoryUrl: "https://github.com/leocoliveiraa/pdfusion",
@@ -441,8 +437,8 @@ const projects: Project[] = [
     title: "VaultMapz",
     year: "2025",
     description: {
-      pt: "Gerencie suas finanças de forma prática — acompanhe receitas, despesas e saldo em um dashboard interativo, com autenticação, dark/light mode e design responsivo.",
-      en: "Manage your finances in a practical way — track income, expenses and balance on an interactive dashboard, with authentication, dark/light mode and responsive design.",
+      pt: "Dashboard financeiro para acompanhar receitas, despesas e saldo com autenticação, gráficos e tema claro/escuro.",
+      en: "Finance dashboard for tracking income, expenses and balance with authentication, charts and light/dark mode.",
     },
     technologies: ["React", "TypeScript", "Firebase", "Styled Components", "Recharts"],
     repositoryUrl: "https://github.com/leocoliveiraa/vaultmapz",
@@ -454,8 +450,8 @@ const projects: Project[] = [
     title: "Round Corners",
     year: "2025",
     description: {
-      pt: "Uma ferramenta web simples e intuitiva para arredondar os cantos de imagens online. Interface drag-and-drop com preview em tempo real.",
-      en: "A simple and intuitive web tool for rounding image corners online. Drag-and-drop interface with real-time preview.",
+      pt: "Ferramenta simples para arredondar cantos de imagens no navegador, com drag-and-drop e preview em tempo real.",
+      en: "Simple tool for rounding image corners in the browser, with drag-and-drop and real-time preview.",
     },
     technologies: ["HTML5 Canvas", "JavaScript", "CSS3"],
     repositoryUrl: "https://github.com/leocoliveiraa/round-corners",
@@ -467,8 +463,8 @@ const projects: Project[] = [
     title: "LariStudio Portfólio",
     year: "2025",
     description: {
-      pt: "Um site portfólio criado para a LariStudio! Uma designer gráfica para marcas alternativas, fofas & autênticas.",
-      en: "A website portfolio created for LariStudio! A graphic designer for alternative, cute and authentic brands.",
+      pt: "Portfólio criado para a LariStudio, uma designer gráfica com foco em marcas alternativas e autênticas.",
+      en: "Portfolio built for LariStudio, a graphic designer focused on alternative and authentic brands.",
     },
     technologies: ["React", "TypeScript", "Styled Components", "Vercel"],
     repositoryUrl: "https://github.com/leocoliveiraa/laristudio",
@@ -480,8 +476,8 @@ const projects: Project[] = [
     title: "Notedz",
     year: "2024",
     description: {
-      pt: "Uma aplicação para escrever e anotar tudo o que você quiser! Desde receitas, até ideias, histórias ou roteiros!",
-      en: "An application to write and note everything you want! From recipes to ideas, stories or scripts!",
+      pt: "Aplicação de escrita e anotações para organizar ideias, receitas, histórias, roteiros e documentos pessoais.",
+      en: "Writing and notes app for organizing ideas, recipes, stories, scripts and personal documents.",
     },
     technologies: ["React", "Styled Components", "Quill", "Local Storage"],
     repositoryUrl: "https://github.com/leocoliveiraa/notedz",
@@ -493,7 +489,7 @@ const projects: Project[] = [
 const translations = {
   en: {
     title: "Projects",
-    subtitle: "A selection of projects I've built with passion and dedication",
+    subtitle: "Some things I built, tested and put online",
     repository: "Code",
     visit: "Live Demo",
     noProjects: {
@@ -503,7 +499,7 @@ const translations = {
   },
   pt: {
     title: "Projetos",
-    subtitle: "Uma seleção de projetos que construí com paixão e dedicação",
+    subtitle: "Algumas coisas que eu construí, testei e coloquei no ar",
     repository: "Código",
     visit: "Ver Demo",
     noProjects: {

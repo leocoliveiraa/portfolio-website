@@ -109,6 +109,7 @@ const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
+  align-items: stretch;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
@@ -123,6 +124,7 @@ const FormSection = styled.div`
   padding: 2rem;
   box-shadow: 0 2px 10px ${({ theme }) => theme.text}05;
   transition: all 0.3s ease;
+  height: 100%;
 
   &:hover {
     transform: translateY(-2px);
@@ -138,6 +140,7 @@ const ContactInfoSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  height: 100%;
 `;
 
 const SectionHeader = styled.div`
@@ -291,6 +294,9 @@ const ContactCard = styled.div`
   padding: 2rem;
   box-shadow: 0 2px 10px ${({ theme }) => theme.text}05;
   transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-2px);
@@ -306,7 +312,7 @@ const ContactItem = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   padding: 1rem;
   background: ${({ theme }) => theme.text}05;
   border: 1px solid ${({ theme }) => theme.text}10;
@@ -343,7 +349,8 @@ const ContactInfo = styled.div`
 `;
 
 const SocialSection = styled.div`
-  margin-top: 1.5rem;
+  margin-top: auto;
+  padding-top: 2rem;
 `;
 
 const SocialLabel = styled.h3`
@@ -454,15 +461,15 @@ const StatusMessage = styled.div<{ $type: "success" | "error" }>`
 const translations = {
   en: {
     title: "Contact",
-    subtitle: "Let's work together",
+    subtitle: "Send me a message and I will get back to you",
     form: {
-      title: "Send Message",
+      title: "Send a Message",
       name: "Name",
       namePlaceholder: "Your name",
       email: "Email",
       emailPlaceholder: "your.email@example.com",
       message: "Message",
-      messagePlaceholder: "Tell me about your project or just say hi!",
+      messagePlaceholder: "Write your message here.",
       submit: "Send Message",
       sending: "Sending...",
       success: "Message sent successfully!",
@@ -477,7 +484,7 @@ const translations = {
   },
   pt: {
     title: "Contato",
-    subtitle: "Vamos trabalhar juntos",
+    subtitle: "Me mande uma mensagem que eu respondo por aqui",
     form: {
       title: "Enviar Mensagem",
       name: "Nome",
@@ -485,8 +492,8 @@ const translations = {
       email: "Email",
       emailPlaceholder: "seu.email@exemplo.com",
       message: "Mensagem",
-      messagePlaceholder: "Conte-me sobre seu projeto ou apenas diga olá!",
-      submit: "Enviar Mensagem",
+      messagePlaceholder: "Escreva sua mensagem aqui.",
+      submit: "Enviar mensagem",
       sending: "Enviando...",
       success: "Mensagem enviada com sucesso!",
       error: "Falha ao enviar mensagem. Tente novamente.",

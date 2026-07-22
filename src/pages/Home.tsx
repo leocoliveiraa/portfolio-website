@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
+import { FiArrowRight } from "react-icons/fi";
 import {
-  FiGithub,
-  FiLinkedin,
-  FiInstagram,
-  FiArrowRight,
-  FiCode,
-  FiDownload,
-  FiExternalLink,
-  FiYoutube,
-} from "react-icons/fi";
-import { FaXTwitter } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+  SiCloudflare,
+  SiDocker,
+  SiExpo,
+  SiLaravel,
+  SiMysql,
+  SiNestjs,
+  SiNextdotjs,
+  SiPostgresql,
+  SiPrisma,
+  SiReact,
+  SiStripe,
+  SiTypescript,
+  SiVuedotjs,
+} from "react-icons/si";
 
 interface HomeProps {
   language: "en" | "pt";
@@ -28,21 +32,12 @@ const fadeIn = keyframes`
   }
 `;
 
-const pulse = keyframes`
-  0%, 100% {
-    transform: scale(1);
+const marquee = keyframes`
+  from {
+    transform: translateX(0);
   }
-  50% {
-    transform: scale(1.05);
-  }
-`;
-
-const float = keyframes`
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
+  to {
+    transform: translateX(-50%);
   }
 `;
 
@@ -51,8 +46,8 @@ const Container = styled.section`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 4rem 2rem;
-  min-height: 75vh;
+  padding: 8.4rem 2rem 4rem;
+  min-height: auto;
   justify-content: center;
   animation: ${fadeIn} 1s ease-out;
   max-width: 1200px;
@@ -61,26 +56,27 @@ const Container = styled.section`
   width: 100%;
 
   @media (max-width: 768px) {
-    padding: 2rem 1rem;
-    min-height: 70vh;
+    padding: 7.25rem 1rem 3.25rem;
   }
 `;
 
-const Header = styled.div`
-  margin-bottom: 2.5rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  animation: ${float} 6s ease-in-out infinite;
+const Eyebrow = styled.p`
+  color: ${({ theme }) => theme.text};
+  opacity: 0.62;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0;
 `;
 
 const Description = styled.p`
-  font-size: 1.15rem;
-  max-width: 650px;
+  font-size: 0.95rem;
+  max-width: 560px;
   color: ${({ theme }) => theme.text};
-  line-height: 1.8;
-  margin-bottom: 3rem;
-  opacity: 0.9;
+  line-height: 1.7;
+  margin-bottom: 1.65rem;
+  opacity: 0.78;
   font-weight: 400;
   letter-spacing: 0.2px;
   text-align: center;
@@ -91,20 +87,72 @@ const Description = styled.p`
   }
 `;
 
+const HeroTitle = styled.h1`
+  max-width: 700px;
+  font-size: clamp(2rem, 4.6vw, 3.55rem);
+  line-height: 1.1;
+  color: ${({ theme }) => theme.text};
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 2.1rem;
+  }
+`;
+
+const TechCarousel = styled.div`
+  width: 100%;
+  max-width: 700px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+`;
+
+const TechTrack = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: max-content;
+  animation: ${marquee} 28s linear infinite;
+`;
+
+const TechItem = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid ${({ theme }) => theme.text}12;
+  border-radius: 999px;
+  color: ${({ theme }) => theme.text};
+  background: ${({ theme }) => theme.text}05;
+  white-space: nowrap;
+
+  svg {
+    font-size: 0.95rem;
+    color: var(--tech-color);
+  }
+
+  span {
+    font-size: 0.78rem;
+    opacity: 0.86;
+    font-weight: 500;
+  }
+`;
+
 const ActionsSection = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 3.5rem;
   width: 100%;
-  max-width: 650px;
+  max-width: 780px;
   align-items: center;
+  justify-content: center;
 `;
 
 const PrimaryActions = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
 
   @media (max-width: 768px) {
@@ -116,12 +164,12 @@ const PrimaryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 1.8rem;
+  padding: 0.8rem 1.2rem;
   background: ${({ theme }) => theme.text};
   color: ${({ theme }) => theme.background};
   border: none;
   border-radius: 14px;
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: 0.3px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,6 +177,7 @@ const PrimaryButton = styled.button`
   overflow: hidden;
   box-shadow: 0 4px 14px ${({ theme }) => theme.text}25;
   cursor: pointer;
+  white-space: nowrap;
 
   &::before {
     content: "";
@@ -178,18 +227,19 @@ const SecondaryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 1.8rem;
+  padding: 0.8rem 1.2rem;
   border: 1.5px solid ${({ theme }) => theme.text}30;
   color: ${({ theme }) => theme.text};
   background: ${({ theme }) => theme.text}05;
   border-radius: 14px;
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   font-weight: 500;
   letter-spacing: 0.3px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   backdrop-filter: blur(10px);
   cursor: pointer;
+  white-space: nowrap;
 
   &::before {
     content: "";
@@ -231,305 +281,91 @@ const SecondaryButton = styled.button`
   }
 `;
 
-const SocialSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  align-items: center;
-`;
-
-const SocialLabel = styled.p`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.text};
-  opacity: 0.7;
-  font-weight: 500;
-  margin: 0;
-`;
-
-const SocialIcons = styled.div`
-  display: flex;
-  gap: 1rem;
-  font-size: 1.3rem;
-  justify-content: center;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    color: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme.text}06;
-    border: 1px solid ${({ theme }) => theme.text}12;
-    border-radius: 14px;
-    transition: all 0.3s ease;
-    opacity: 0.8;
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        135deg,
-        transparent,
-        ${({ theme }) => theme.text}10,
-        transparent
-      );
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    &[href*="github.com"] {
-      &:hover {
-        background: rgba(139, 92, 246, 0.1);
-        border-color: rgba(139, 92, 246, 0.3);
-        color: #8b5cf6;
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
-        transform: translateY(-3px) scale(1.05);
-      }
-    }
-
-    &[href*="linkedin.com"] {
-      &:hover {
-        background: rgba(0, 119, 181, 0.1);
-        border-color: rgba(0, 119, 181, 0.3);
-        color: #0077b5;
-        box-shadow: 0 8px 25px rgba(0, 119, 181, 0.2);
-        transform: translateY(-3px) scale(1.05);
-      }
-    }
-
-    &[href*="youtube.com"] {
-      &:hover {
-        background: rgba(255, 0, 0, 0.1);
-        border-color: rgba(255, 0, 0, 0.3);
-        color: #ff0000;
-        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
-        transform: translateY(-3px) scale(1.05);
-      }
-    }
-
-    &[href*="instagram.com"] {
-      &:hover {
-        background: linear-gradient(
-          45deg,
-          rgba(225, 48, 108, 0.1),
-          rgba(255, 101, 48, 0.1)
-        );
-        border-color: rgba(225, 48, 108, 0.3);
-        color: #e1306c;
-        box-shadow: 0 8px 25px rgba(225, 48, 108, 0.2);
-        transform: translateY(-3px) scale(1.05);
-      }
-    }
-
-    &[href*="twitter.com"] {
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-        border-color: rgba(0, 0, 0, 0.3);
-        color: #000;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        transform: translateY(-3px) scale(1.05);
-      }
-    }
-
-    &:hover {
-      opacity: 1;
-
-      &::before {
-        opacity: 1;
-      }
-    }
-  }
-`;
-
-const Highlight = styled.span`
-  background: linear-gradient(
-    120deg,
-    ${({ theme }) => theme.text}18 0%,
-    ${({ theme }) => theme.text}10 100%
-  );
-  padding: 0.05rem 0.4rem;
-  border-radius: 10px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text};
-  border: 1px solid ${({ theme }) => theme.text}15;
-  position: relative;
-  transition: all 0.3s ease;
-  display: inline-block;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px ${({ theme }) => theme.text}20;
-  }
-`;
-
-const StatusIndicator = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.2rem;
-  background: ${({ theme }) => theme.text}06;
-  border: 1px solid ${({ theme }) => theme.text}15;
-  border-radius: 24px;
-  backdrop-filter: blur(12px);
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.text};
-  opacity: 0.9;
-  font-weight: 500;
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    background: #22c55e;
-    border-radius: 50%;
-    animation: ${pulse} 2s ease-in-out infinite;
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
-  }
-`;
-
 const translations = {
   en: {
-    status: "Available for new projects",
+    eyebrow: "Full-stack developer · Pelotas/RS",
+    title: "I build digital products for real use.",
     description: {
-      text: "Specialized in building modern web applications with",
-      react: "React",
-      typescript: "TypeScript",
-      nodejs: "Node.js",
+      text: "Web, mobile, SaaS and automations with clear interfaces and practical delivery.",
     },
     buttons: {
       viewProjects: "View Projects",
-      contact: "Contact me",
-      downloadCV: "Download CV",
-    },
-    social: {
-      connect: "Let's connect",
+      contact: "Get in Touch",
     },
   },
   pt: {
-    status: "Disponível para novos projetos",
+    eyebrow: "Desenvolvedor full-stack · Pelotas/RS",
+    title: "Desenvolvo produtos digitais para uso real.",
     description: {
-      text: "Especializado em construir aplicações web modernas com",
-      react: "React",
-      typescript: "TypeScript",
-      nodejs: "Node.js",
+      text: "Web, mobile, SaaS e automações com interface clara e entrega prática.",
     },
     buttons: {
-      viewProjects: "Ver Projetos",
-      contact: "Contate-me",
-      downloadCV: "Baixar CV",
-    },
-    social: {
-      connect: "Vamos nos conectar",
+      viewProjects: "Ver projetos",
+      contact: "Entrar em contato",
     },
   },
 };
 
+const stackItems = [
+  { name: "TypeScript", icon: SiTypescript, color: "#3178c6" },
+  { name: "React", icon: SiReact, color: "#61dafb" },
+  { name: "Next.js", icon: SiNextdotjs, color: "#f1f1f1" },
+  { name: "NestJS", icon: SiNestjs, color: "#e0234e" },
+  { name: "Laravel", icon: SiLaravel, color: "#ff2d20" },
+  { name: "PostgreSQL", icon: SiPostgresql, color: "#4169e1" },
+  { name: "Prisma", icon: SiPrisma, color: "#5a67d8" },
+  { name: "Expo", icon: SiExpo, color: "#f1f1f1" },
+  { name: "Vue.js", icon: SiVuedotjs, color: "#42b883" },
+  { name: "MySQL", icon: SiMysql, color: "#4479a1" },
+  { name: "Docker", icon: SiDocker, color: "#2496ed" },
+  { name: "Cloudflare", icon: SiCloudflare, color: "#f38020" },
+  { name: "Stripe", icon: SiStripe, color: "#635bff" },
+];
+
 const Home: React.FC<HomeProps> = ({ language }) => {
-  const navigate = useNavigate();
   const t = translations[language];
-  const [, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleContactClick = () => {
-    navigate("/contact");
-  };
-
-  const handleDownloadCV = () => {
-    window.open(
-      "https://drive.google.com/file/d/1T1llhBzoxHZGNYfqE_oulvJDF5dIVso4/view?usp=sharing",
-      "_blank"
-    );
+  const scrollToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <Container>
-      <Header>
-        <StatusIndicator>
-          <div className="status-dot" />
-          <span>{t.status}</span>
-        </StatusIndicator>
-      </Header>
+      <Eyebrow>{t.eyebrow}</Eyebrow>
 
-      <Description>
-        {t.description.text} <Highlight>{t.description.typescript}</Highlight>
-        , <Highlight>{t.description.react}</Highlight>{" "}
-        {language === "en" ? "and" : "e"}{" "}
-        <Highlight>{t.description.nodejs}</Highlight>.
-      </Description>
+      <HeroTitle>{t.title}</HeroTitle>
+
+      <Description>{t.description.text}</Description>
+
+      <TechCarousel aria-label="Stack">
+        <TechTrack>
+          {[...stackItems, ...stackItems].map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <TechItem
+                key={`${item.name}-${index}`}
+                style={{ "--tech-color": item.color } as React.CSSProperties}
+              >
+                <Icon />
+                <span>{item.name}</span>
+              </TechItem>
+            );
+          })}
+        </TechTrack>
+      </TechCarousel>
 
       <ActionsSection>
         <PrimaryActions>
-          <PrimaryButton onClick={() => navigate("/projects")}>
-            <FiCode />
+          <PrimaryButton onClick={() => scrollToSection("projects")}>
             {t.buttons.viewProjects}
             <FiArrowRight />
           </PrimaryButton>
 
-          <SecondaryButton onClick={handleContactClick}>
+          <SecondaryButton onClick={() => scrollToSection("contact")}>
             {t.buttons.contact}
             <FiArrowRight />
           </SecondaryButton>
-
-          <SecondaryButton onClick={handleDownloadCV}>
-            <FiDownload />
-            {t.buttons.downloadCV}
-            <FiExternalLink />
-          </SecondaryButton>
         </PrimaryActions>
-
-        <SocialSection>
-          <SocialLabel>{t.social.connect}</SocialLabel>
-          <SocialIcons>
-            <a
-              href="https://github.com/leocoliveiraa"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="GitHub"
-            >
-              <FiGithub />
-            </a>
-            <a
-              href="https://linkedin.com/in/leocoliveira"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="LinkedIn"
-            >
-              <FiLinkedin />
-            </a>
-            <a
-              href="https://www.youtube.com/@leodev_"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="YouTube"
-            >
-              <FiYoutube />
-            </a>
-            <a
-              href="https://twitter.com/leocoliveira"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Twitter"
-            >
-              <FaXTwitter />
-            </a>
-            <a
-              href="https://instagram.com/leobtwz"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Instagram"
-            >
-              <FiInstagram />
-            </a>
-          </SocialIcons>
-        </SocialSection>
       </ActionsSection>
     </Container>
   );

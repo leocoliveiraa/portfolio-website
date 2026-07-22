@@ -1,22 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
-import { FiUser, FiCalendar, FiCode, FiBookOpen, FiBriefcase, FiExternalLink } from "react-icons/fi";
+import { FiUser, FiCalendar, FiBookOpen, FiBriefcase, FiExternalLink } from "react-icons/fi";
 import { FaGraduationCap } from "react-icons/fa6";
-
-import {
-  SiHtml5,
-  SiCss3,
-  SiJavascript,
-  SiReact,
-  SiNodedotjs,
-  SiTailwindcss,
-  SiTypescript,
-  SiMongodb,
-  SiMysql,
-  SiFirebase,
-  SiSupabase,
-  SiPostgresql,
-} from "react-icons/si";
 
 interface AboutProps {
   language: "en" | "pt";
@@ -31,11 +16,6 @@ const fadeIn = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`;
-
-const hoverFloat = keyframes`
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
 `;
 
 const Container = styled.section`
@@ -94,21 +74,10 @@ const Subtitle = styled.p`
 `;
 
 const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 3rem;
-
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-`;
-
-const RightColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 3rem;
 
   @media (max-width: 968px) {
     gap: 1.5rem;
@@ -220,6 +189,10 @@ const ExperienceCard = styled.div`
   &:hover {
     background: ${({ theme }) => theme.text}08;
   }
+
+  & + & {
+    margin-top: 1rem;
+  }
 `;
 
 const CompanyLogo = styled.img`
@@ -264,6 +237,15 @@ const CompanyLink = styled.a`
   }
 `;
 
+const CompanyName = styled.span`
+  font-size: 0.95rem;
+  color: ${({ theme }) => theme.text};
+  opacity: 0.85;
+  font-weight: 500;
+  display: inline-flex;
+  margin-bottom: 0.4rem;
+`;
+
 const ExperiencePeriod = styled.span`
   font-size: 0.85rem;
   color: ${({ theme }) => theme.text}70;
@@ -273,106 +255,17 @@ const ExperiencePeriod = styled.span`
   gap: 0.3rem;
 `;
 
-const TechStackSection = styled.div`
-  grid-column: 1 / -1;
-
-  @media (max-width: 968px) {
-    grid-column: 1;
-  }
-`;
-
-const TechGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-`;
-
-const TechCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 1.2rem;
-  background: ${({ theme }) => theme.text}05;
-  border: 1px solid ${({ theme }) => theme.text}10;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: ${({ theme }) => theme.text}08;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px ${({ theme }) => theme.text}15;
-
-    svg {
-      animation: ${hoverFloat} 0.6s ease-in-out;
-    }
-  }
-
-  svg {
-    font-size: 2rem;
-    transition: transform 0.2s ease;
-  }
-
-  span {
-    font-size: 0.85rem;
-    color: ${({ theme }) => theme.text};
-    font-weight: 500;
-  }
-
-  &.html svg {
-    color: #e34c26;
-  }
-  &.css svg {
-    color: #1572b6;
-  }
-  &.javascript svg {
-    color: #f7df1e;
-  }
-  &.typescript svg {
-    color: #3178c6;
-  }
-  &.react svg {
-    color: #61dafb;
-  }
-  &.nodejs svg {
-    color: #339933;
-  }
-  &.mongodb svg {
-    color: #47a248;
-  }
-  &.mysql svg {
-    color: #4479a1;
-  }
-  &.firebase svg {
-    color: #ffca28;
-  }
-  &.tailwind svg {
-    color: #06b6d4;
-  }
-  &.supabase svg {
-    color: #3ecf8e;
-  }
-  &.postgresql svg {
-    color: #4169e1;
-  }
-`;
 
 const translations = {
   en: {
-    title: "About Me",
-    subtitle: "Get to know me better",
+    title: "About",
+    subtitle: "A bit about how I work and what I use",
     about: {
-      title: "About",
+      title: "How I work",
       text1:
-        "My name is Leonardo, I'm 20 years old and I'm a Full-Stack developer! I'm currently studying Systems Analysis and Development at UNINTER (International University Center).",
+        "I am a full-stack developer focused on building web products, internal tools, automations and apps that people can actually use. I like working close to the product, understanding the problem and shipping something that feels simple on the outside and solid underneath.",
       text2:
-        "I've been passionate about technology since I was a child, and my first contact with programming was when I was 13 years old, using Java to create Minecraft plugins. Over the years, I've deepened my knowledge in the programming world and realized that this was what I wanted for my life.",
-    },
-    personal: {
-      title: "Personal Info",
-      age: "20 years old",
-      location: "Pelotas, RS",
-      interests: "Technology & Gaming",
+        "Today I work at BMD3 as the main technical person on multiple products, while also exploring ideas for my own SaaS projects.",
     },
     education: {
       title: "Education",
@@ -382,35 +275,23 @@ const translations = {
     },
     experience: {
       title: "Experience",
-      role: "Technology Intern",
-      company: "Cluster",
-      period: "Oct 2025 - Present",
-    },
-    techStack: {
-      title: "Technology Stack",
-    },
-    stats: {
-      experience: "Years of Experience",
-      projects: "Projects Completed",
-      technologies: "Technologies",
-      learning: "Always Learning",
+      currentRole: "Full-stack developer",
+      currentCompany: "BMD3 · Self-employed",
+      currentPeriod: "Jan 2026 - Present · 7 months",
+      previousRole: "Software Developer",
+      previousCompany: "Cluster",
+      previousPeriod: "Oct 2025 - Jul 2026 · 10 months",
     },
   },
   pt: {
-    title: "Sobre Mim",
-    subtitle: "Conheça um pouco mais sobre mim",
+    title: "Sobre",
+    subtitle: "Um pouco sobre como eu trabalho e o que eu uso",
     about: {
-      title: "Sobre",
+      title: "Como eu trabalho",
       text1:
-        "Me chamo Leonardo, tenho 20 anos e sou um desenvolvedor Full-Stack! Atualmente estou cursando Análise e Desenvolvimento de Sistemas na UNINTER (Centro Universitário Internacional).",
+        "Sou desenvolvedor full-stack focado em construir produtos web, ferramentas internas, automações e apps que as pessoas realmente conseguem usar. Gosto de trabalhar perto do produto, entender o problema e entregar algo simples por fora e sólido por baixo.",
       text2:
-        "Sou apaixonado por tecnologia desde criança, e meu primeiro contato com programação foi com 13 anos, utilizando a linguagem Java para criar plugins de Minecraft. Com o passar dos anos, me aprofundei no mundo da programação e percebi que era isso que queria para a minha vida.",
-    },
-    personal: {
-      title: "Informações Pessoais",
-      age: "20 anos",
-      location: "Pelotas, RS",
-      interests: "Tecnologia & Games",
+        "Hoje atuo na BMD3 como a principal pessoa técnica em múltiplos produtos, enquanto também exploro ideias para meus próprios projetos SaaS.",
     },
     education: {
       title: "Educação",
@@ -420,50 +301,18 @@ const translations = {
     },
     experience: {
       title: "Experiência",
-      role: "Estagiário de Tecnologia",
-      company: "Cluster",
-      period: "Out 2025 - Presente",
-    },
-    techStack: {
-      title: "Stack Tecnológico",
-    },
-    stats: {
-      experience: "Anos de Experiência",
-      projects: "Projetos Concluídos",
-      technologies: "Tecnologias",
-      learning: "Sempre Aprendendo",
+      currentRole: "Desenvolvedor full-stack",
+      currentCompany: "BMD3 · Autônomo",
+      currentPeriod: "jan de 2026 - o momento · 7 meses",
+      previousRole: "Desenvolvedor de Software",
+      previousCompany: "Cluster",
+      previousPeriod: "out de 2025 - jul de 2026 · 10 meses",
     },
   },
 };
 
 const About: React.FC<AboutProps> = ({ language }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const t = translations[language];
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const technologies = React.useMemo(
-    () => [
-      { name: "HTML5", icon: SiHtml5, class: "html" },
-      { name: "CSS3", icon: SiCss3, class: "css" },
-      { name: "JavaScript", icon: SiJavascript, class: "javascript" },
-      { name: "TypeScript", icon: SiTypescript, class: "typescript" },
-      { name: "React", icon: SiReact, class: "react" },
-      { name: "Node.js", icon: SiNodedotjs, class: "nodejs" },
-      { name: "PostgreSQL", icon: SiPostgresql, class: "postgresql" },
-      { name: "Supabase", icon: SiSupabase, class: "supabase" },
-      { name: "MongoDB", icon: SiMongodb, class: "mongodb" },
-      { name: "MySQL", icon: SiMysql, class: "mysql" },
-      { name: "Firebase", icon: SiFirebase, class: "firebase" },
-      { name: "Tailwind", icon: SiTailwindcss, class: "tailwind" },
-    ],
-    []
-  );
-
-  if (!isVisible) return null;
 
   return (
     <Container>
@@ -482,67 +331,59 @@ const About: React.FC<AboutProps> = ({ language }) => {
           <AboutText>{t.about.text2}</AboutText>
         </Section>
 
-        <RightColumn>
-          <Section>
-            <SectionHeader>
-              <FiBriefcase />
-              <h2>{t.experience.title}</h2>
-            </SectionHeader>
-            <ExperienceCard>
-              <CompanyLogo src="/cluster.jpeg" alt="Cluster" />
-              <ExperienceInfo>
-                <ExperienceRole>{t.experience.role}</ExperienceRole>
-                <CompanyLink
-                  href="https://soucluster.com.br"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t.experience.company}
-                  <FiExternalLink />
-                </CompanyLink>
-                <ExperiencePeriod>
-                  <FiCalendar />
-                  {t.experience.period}
-                </ExperiencePeriod>
-              </ExperienceInfo>
-            </ExperienceCard>
-          </Section>
-
-          <Section>
-            <SectionHeader>
-              <FaGraduationCap />
-              <h2>{t.education.title}</h2>
-            </SectionHeader>
-            <EducationCard>
-              <EducationTitle>
-                <FiBookOpen />
-                {t.education.university}
-              </EducationTitle>
-              <EducationSubtitle>{t.education.course}</EducationSubtitle>
-              <EducationPeriod>
+        <Section>
+          <SectionHeader>
+            <FiBriefcase />
+            <h2>{t.experience.title}</h2>
+          </SectionHeader>
+          <ExperienceCard>
+            <CompanyLogo src="/bmd3-logo.jpg" alt="BMD3" />
+            <ExperienceInfo>
+              <ExperienceRole>{t.experience.currentRole}</ExperienceRole>
+              <CompanyName>{t.experience.currentCompany}</CompanyName>
+              <ExperiencePeriod>
                 <FiCalendar />
-                {t.education.period}
-              </EducationPeriod>
-            </EducationCard>
-          </Section>
-        </RightColumn>
+                {t.experience.currentPeriod}
+              </ExperiencePeriod>
+            </ExperienceInfo>
+          </ExperienceCard>
+          <ExperienceCard>
+            <CompanyLogo src="/cluster.jpeg" alt="Cluster" />
+            <ExperienceInfo>
+              <ExperienceRole>{t.experience.previousRole}</ExperienceRole>
+              <CompanyLink
+                href="https://soucluster.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.experience.previousCompany}
+                <FiExternalLink />
+              </CompanyLink>
+              <ExperiencePeriod>
+                <FiCalendar />
+                {t.experience.previousPeriod}
+              </ExperiencePeriod>
+            </ExperienceInfo>
+          </ExperienceCard>
+        </Section>
 
-        <TechStackSection>
-          <Section>
-            <SectionHeader>
-              <FiCode />
-              <h2>{t.techStack.title}</h2>
-            </SectionHeader>
-            <TechGrid>
-              {technologies.map((tech) => (
-                <TechCard key={tech.name} className={tech.class}>
-                  <tech.icon />
-                  <span>{tech.name}</span>
-                </TechCard>
-              ))}
-            </TechGrid>
-          </Section>
-        </TechStackSection>
+        <Section>
+          <SectionHeader>
+            <FaGraduationCap />
+            <h2>{t.education.title}</h2>
+          </SectionHeader>
+          <EducationCard>
+            <EducationTitle>
+              <FiBookOpen />
+              {t.education.university}
+            </EducationTitle>
+            <EducationSubtitle>{t.education.course}</EducationSubtitle>
+            <EducationPeriod>
+              <FiCalendar />
+              {t.education.period}
+            </EducationPeriod>
+          </EducationCard>
+        </Section>
       </Content>
     </Container>
   );
