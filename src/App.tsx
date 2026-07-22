@@ -10,7 +10,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [language, setLanguage] = useState<"en" | "pt">("pt");
 
   const toggleLanguage = () => {
@@ -18,7 +18,7 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={isDark ? lightTheme : darkTheme}>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <GlobalStyle />
       <Navbar
         isDark={isDark}

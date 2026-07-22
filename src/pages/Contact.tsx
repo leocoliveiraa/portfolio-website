@@ -500,11 +500,13 @@ const translations = {
   },
 };
 
-const EMAILJS_SERVICE_ID = "service_0kud9gk";
-const EMAILJS_TEMPLATE_ID = "template_7r5lch9";
-const EMAILJS_PUBLIC_KEY = "di583i_8bUipUVcUu";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-emailjs.init(EMAILJS_PUBLIC_KEY);
+if (EMAILJS_PUBLIC_KEY) {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+}
 
 const Contact: React.FC<ContactProps> = ({ language }) => {
   const [formData, setFormData] = useState({
@@ -533,6 +535,10 @@ const Contact: React.FC<ContactProps> = ({ language }) => {
     setStatus("idle");
 
     try {
+      if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+        throw new Error("EmailJS environment variables are missing.");
+      }
+
       const now = new Date();
       const timeFormatted = now.toLocaleString(
         language === "pt" ? "pt-BR" : "en-US",
@@ -554,8 +560,6 @@ const Contact: React.FC<ContactProps> = ({ language }) => {
         time: timeFormatted,
         to_name: "Leonardo",
       };
-
-      console.log("Enviando email com parâmetros:", templateParams);
 
       await emailjs.send(
         EMAILJS_SERVICE_ID,

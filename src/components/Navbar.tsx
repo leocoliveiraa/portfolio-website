@@ -363,7 +363,7 @@ const ThemeToggle = styled.button<ThemeToggleProps>`
   svg {
     transition: all 0.3s ease;
     z-index: 2;
-    color: ${({ isDark }) => (isDark ? "#a855f7" : "#facc15")};
+    color: ${({ isDark }) => (isDark ? "#facc15" : "#a855f7")};
   }
 
   &:hover {
@@ -497,7 +497,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
           <DesktopNavItems>
             <ThemeToggle onClick={toggleTheme} title={t.theme} isDark={isDark}>
-              {isDark ? <FaRegMoon /> : <FiSun />}
+              {isDark ? <FiSun /> : <FaRegMoon />}
             </ThemeToggle>
 
             <Link to="/" className={location.pathname === "/" ? "active" : ""}>
